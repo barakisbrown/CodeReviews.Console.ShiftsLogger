@@ -5,6 +5,8 @@ VisualStudioVersion = 17.12.35707.178 d17.12
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShiftLogger.Barakisbrown", "ShiftLogger.Barakisbrown\ShiftLogger.Barakisbrown.csproj", "{60220B1F-BEE1-419F-8A4A-257E326EC002}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShiftLogger.UI.Barakisbrown", "ShiftLogger.UI.Barakisbrown\ShiftLogger.UI.Barakisbrown.csproj", "{AEDADC2E-7F3F-4681-AB89-C7A077B3724F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{60220B1F-BEE1-419F-8A4A-257E326EC002}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{60220B1F-BEE1-419F-8A4A-257E326EC002}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{60220B1F-BEE1-419F-8A4A-257E326EC002}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AEDADC2E-7F3F-4681-AB89-C7A077B3724F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AEDADC2E-7F3F-4681-AB89-C7A077B3724F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AEDADC2E-7F3F-4681-AB89-C7A077B3724F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AEDADC2E-7F3F-4681-AB89-C7A077B3724F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
