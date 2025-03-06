@@ -8,7 +8,7 @@ internal class ShiftContext : DbContext
     public DbSet<Employee> Employees { get; set; }
     public DbSet<Shifts> Shifts { get; set; }
     
-    public ShiftContext() { }
+    public ShiftContext(DbContextOptions options) : base(options) { }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
