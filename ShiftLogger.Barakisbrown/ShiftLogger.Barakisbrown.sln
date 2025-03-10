@@ -1,11 +1,14 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.12.35707.178 d17.12
+VisualStudioVersion = 17.12.35707.178
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShiftLogger.Barakisbrown", "ShiftLogger.Barakisbrown\ShiftLogger.Barakisbrown.csproj", "{60220B1F-BEE1-419F-8A4A-257E326EC002}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShiftLogger.UI.Barakisbrown", "ShiftLogger.UI.Barakisbrown\ShiftLogger.UI.Barakisbrown.csproj", "{AEDADC2E-7F3F-4681-AB89-C7A077B3724F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{60220B1F-BEE1-419F-8A4A-257E326EC002} = {60220B1F-BEE1-419F-8A4A-257E326EC002}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
