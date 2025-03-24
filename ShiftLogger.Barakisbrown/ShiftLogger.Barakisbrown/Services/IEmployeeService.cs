@@ -3,10 +3,15 @@
 namespace ShiftLogger.Barakisbrown.Services;
 
 public interface IEmployeeService
-{
-    public List<Shifts> GetAllShifts(int employeeId);
-    public List<Employee> GetAllEmployees();
-    public bool AddEmployee(string firstName,string lastName);
-    public bool RemoveEmployee(int removeId);
-    public bool UpdateEmployee(int updateId, string? firstName, string? lastName);
+{   
+    // RETRY INFO BELOW
+    Task<List<Employee>> Get();
+
+    Task<Employee> GetById(int id);
+
+    Task<Employee> AddEmployee(Employee newEmployee);
+
+    Task Update(Employee updatedEmployee);
+
+    Task Delete(int id);
 }
