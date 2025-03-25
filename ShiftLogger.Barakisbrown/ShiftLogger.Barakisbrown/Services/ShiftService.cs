@@ -1,4 +1,5 @@
-﻿using ShiftLogger.Barakisbrown.DataLayer;
+﻿using Microsoft.EntityFrameworkCore;
+using ShiftLogger.Barakisbrown.DataLayer;
 using ShiftLogger.Barakisbrown.Models;
 
 namespace ShiftLogger.Barakisbrown.Services;
@@ -7,28 +8,28 @@ internal class ShiftService(ShiftContext context) : IShiftService
 {
     private readonly ShiftContext _context = context;
 
-    public Shifts CreateShift()
+    public async Task<List<Shifts>> Get(int EmployeeID)
     {
-        throw new NotImplementedException();
+       return await _context.Shifts.Where(s => s.EmployeeID == EmployeeID).ToListAsync();
     }
 
-    public bool DeleteAllShifts(int EmployeeID)
+    public async Task<Shifts> CreateShift(Shifts shifts)
     {
-        throw new NotImplementedException();
+        _context.Shifts.Add(shifts);
+        await _context.SaveChangesAsync();
+        return shifts;
     }
 
-    public bool DeleteShift(int ShiftId, int EmployeeID)
+    public async Task DeleteShift(int ShiftId, int EmployeeID)
     {
-        throw new NotImplementedException();
+        var shift = _context.Shifts.FirstOrDefault(x => x.Id == ShiftId && x.EmployeeID == EmployeeID);
+        _context.Shifts.Remove(shift);
+        await _context.SaveChangesAsync();
     }
 
-    public Shifts EditShift(int EmployeeId)
+    public async Task Update(Shifts updatedShift)
     {
-        throw new NotImplementedException();
-    }
-
-    public Shifts ViewShift(int EmployeeId)
-    {
-        throw new NotImplementedException();
+        _context.Entry(updatedShift).State = EntityState.Modified;
+        await _context.SaveChangesAsync();
     }
 }

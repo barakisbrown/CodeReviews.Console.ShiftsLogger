@@ -4,9 +4,11 @@ namespace ShiftLogger.Barakisbrown.Services;
 
 public interface IShiftService
 {
-    Shifts CreateShift();
-    Shifts ViewShift(int EmployeeId);
-    Shifts EditShift(int EmployeeId);
-    bool DeleteShift(int ShiftId,int EmployeeID);
-    bool DeleteAllShifts(int EmployeeID);
+    Task<List<Shifts>> Get(int EmployeeID);
+
+    Task<Shifts> CreateShift(Shifts shifts);
+    
+    Task Update(Shifts updatedShift);
+    
+    Task DeleteShift(int ShiftId,int EmployeeID);
 }
