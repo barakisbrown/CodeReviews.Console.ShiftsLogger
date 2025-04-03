@@ -15,12 +15,14 @@ namespace ShiftLogger.Barakisbrown.Controllers
             _employeeService = employeeService;
         }
 
+        // GET: api/Employees
         [HttpGet]
         public async Task<IEnumerable<Employee>> GetEmployees()
         {
             return await _employeeService.Get();
         }
 
+        // GET=> api/Employee/{id}
         [HttpGet("{EmployeeId}")]
         public async Task<ActionResult<Employee>> GetEmployee(int EmployeeId)
         {
