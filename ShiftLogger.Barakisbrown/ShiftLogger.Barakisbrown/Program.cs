@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using ShiftLogger.Barakisbrown.DataLayer;
-using ShiftLogger.Barakisbrown.Services;
+using ShiftLogger.Barakisbrown.Interfaces;
+using ShiftLogger.Barakisbrown.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,8 +12,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 // ADD DB CONTEXT BELOW
 builder.Services.AddDbContext<ShiftContext>(opt => opt.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
-builder.Services.AddScoped<IShiftService, ShiftService>();
-builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+builder.Services.AddScoped<IShiftRepository, ShiftRepository>();
+builder.Services.AddScoped<IEmployeeRepository, EmployeeRespository>();
 
 var app = builder.Build();
 app.UseHttpsRedirection();
@@ -23,8 +24,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
-app.UseHttpsRedirection();
 
 app.MapControllers();
 
