@@ -1,32 +1,34 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using ShiftLogger.Barakisbrown.Models;
-using ShiftLogger.Barakisbrown.Services;
+using ShiftLogger.Barakisbrown.Interfaces;
 
 namespace ShiftLogger.Barakisbrown.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/employee")]
     [ApiController]
     public class EmployeeController : ControllerBase
     {
-        private readonly IEmployeeService _employeeService;
+        private readonly IEmployeeRepository _employeeRepo;
 
-        public EmployeeController(IEmployeeService employeeService)
+        public EmployeeController(IEmployeeRepository empRepo)
         {
-            _employeeService = employeeService;
+            _employeeRepo = empRepo;
         }
 
         // GET: api/Employees
         [HttpGet]
-        public async Task<IEnumerable<Employee>> GetEmployees()
+        public async Task<IActionResult> GetAllEmployees()
         {
-            return await _employeeService.Get();
+            var emps = await _employeeRepo.GetAllAsync();
+            return Ok(emps);
         }
 
         // GET=> api/Employee/{id}
-        [HttpGet("{EmployeeId}")]
-        public async Task<ActionResult<Employee>> GetEmployee(int EmployeeId)
+        [HttpGet("{Id}")]
+        public async Task<IActionResult> GetEmployee(int Id)
         {
-            return await _employeeService.GetById(EmployeeId);
+            var emp = await _employeeRepo.GetByIDAsync(Id);
+            if (emp == null) return NotFound();
+            return Ok(emp);
         }
     }
 }
