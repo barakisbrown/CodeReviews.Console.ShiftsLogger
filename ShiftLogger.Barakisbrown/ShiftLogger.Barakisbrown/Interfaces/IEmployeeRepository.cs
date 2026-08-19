@@ -10,6 +10,6 @@ public interface IEmployeeRepository
 
     Task<Employee> AddEmployeeAsync(Employee newEmployee);
 
-    Task<Employee ?> Update(Employee updatedEmployee);
+    Task<Employee ?> Update(int id,Employee updatedEmployee);
     Task<Employee?> Delete(int id);
 }
