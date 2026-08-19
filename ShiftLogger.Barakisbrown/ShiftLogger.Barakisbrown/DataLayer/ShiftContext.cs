@@ -3,7 +3,7 @@
 using Microsoft.EntityFrameworkCore;
 using Models;
 
-internal class ShiftContext : DbContext
+public class ShiftContext : DbContext
 {
     public DbSet<Employee> Employees { get; set; }
     public DbSet<Shifts> Shifts { get; set; }

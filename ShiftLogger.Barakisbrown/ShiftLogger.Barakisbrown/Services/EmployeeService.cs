@@ -4,13 +4,13 @@ using ShiftLogger.Barakisbrown.Models;
 
 namespace ShiftLogger.Barakisbrown.Services;
 
-internal class EmployeeService(ShiftContext shiftContext) : IEmployeeService
+public class EmployeeService(ShiftContext shiftContext) : IEmployeeService
 {
     private readonly ShiftContext _shiftContext = shiftContext;
 
     // RETRY BELOW
     public async Task<Employee> AddEmployee(Employee newEmployee)
-    {
+    {        
         _shiftContext.Add(newEmployee);
         await _shiftContext.SaveChangesAsync();
 
