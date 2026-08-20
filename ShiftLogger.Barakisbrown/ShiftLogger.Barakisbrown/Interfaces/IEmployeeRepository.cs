@@ -12,4 +12,5 @@ public interface IEmployeeRepository
 
     Task<Employee ?> Update(int id,Employee updatedEmployee);
     Task<Employee?> Delete(int id);
+    Task<Employee> OneTimeUse();
 }

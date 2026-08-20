@@ -5,9 +5,14 @@ using ShiftLogger.Barakisbrown.DataLayer;
 using ShiftLogger.Barakisbrown.Interfaces;
 using ShiftLogger.Barakisbrown.Models;
 
-public class EmployeeRespository(ShiftContext context) : IEmployeeRepository
+public class EmployeeRespository : IEmployeeRepository
 {
-    private readonly ShiftContext _context = context;
+    private readonly ShiftContext _context;
+
+    public EmployeeRespository(ShiftContext context)
+    {
+        _context = context;
+    }
 
     public async Task<Employee> AddEmployeeAsync(Employee newEmployee)
     {
@@ -18,11 +23,11 @@ public class EmployeeRespository(ShiftContext context) : IEmployeeRepository
 
     public async Task<Employee?> Delete(int id)
     {
-        var emp = await _context.Employees.FirstOrDefaultAsync(x => x.Id == id);
-        if (emp == null) return null;
-        _context.Remove(emp);
+        var deletedEmp = await _context.Employees.FirstOrDefaultAsync(x => x.Id == id);
+        if (deletedEmp == null) return null;
+        _context.Employees.Remove(deletedEmp);
         await _context.SaveChangesAsync();
-        return emp;
+        return deletedEmp;
 
     }
 
@@ -36,7 +41,7 @@ public class EmployeeRespository(ShiftContext context) : IEmployeeRepository
         return await _context.Employees.FindAsync(id);
     }
 
-    public async Task<Employee?> Update(int id,Employee updatedEmployee)
+    public async Task<Employee?> Update(int id, Employee updatedEmployee)
     {
         var emp = await _context.Employees.FirstOrDefaultAsync(x => x.Id == id);
 
@@ -48,5 +53,21 @@ public class EmployeeRespository(ShiftContext context) : IEmployeeRepository
 
         await _context.SaveChangesAsync();
         return emp;
+    }
+
+    public async Task<Employee> OneTimeUse()
+    {
+        int id = 1;
+        List<Shifts> mine = await _context.Shifts.Where(x => x.EmployeeID == id).ToListAsync();
+        var emp = await _context.Employees.FindAsync(id);
+
+        foreach(var shift in mine)
+        {
+            emp.shifts.Add(shift);
+        }
+
+        await _context.SaveChangesAsync();
+        return emp;
+
     }
 }
