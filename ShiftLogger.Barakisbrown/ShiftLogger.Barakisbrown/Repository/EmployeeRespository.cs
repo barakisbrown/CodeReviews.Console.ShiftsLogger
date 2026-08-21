@@ -53,21 +53,5 @@ public class EmployeeRespository : IEmployeeRepository
 
         await _context.SaveChangesAsync();
         return emp;
-    }
-
-    public async Task<Employee> OneTimeUse()
-    {
-        int id = 1;
-        List<Shifts> mine = await _context.Shifts.Where(x => x.EmployeeID == id).ToListAsync();
-        var emp = await _context.Employees.FindAsync(id);
-
-        foreach(var shift in mine)
-        {
-            emp.shifts.Add(shift);
-        }
-
-        await _context.SaveChangesAsync();
-        return emp;
-
-    }
+    }   
 }

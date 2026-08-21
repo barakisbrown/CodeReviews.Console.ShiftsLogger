@@ -25,18 +25,10 @@ namespace ShiftLogger.Barakisbrown.Controllers
             var emps = await _employeeRepo.GetAllAsync();
             return Ok(emps);
         }
-
-        [HttpGet]
-        [Route("onetimeuse")]
-        public async Task<IActionResult> OneTimeUse()
-        {
-            await _employeeRepo.OneTimeUse();
-            return Ok();
-        }
-
+        
         // GET=> api/Employee/{id}
         [HttpGet("{Id}")]
-        public async Task<IActionResult> GetEmployee(int Id)
+        public async Task<IActionResult> GetEmployee([FromRoute] int Id)
         {
             var emp = await _employeeRepo.GetByIDAsync(Id);
             if (emp == null) return NotFound();

@@ -25,21 +25,27 @@ namespace ShiftLogger.Barakisbrown.Repository
 
         }
 
-        public async Task<List<Shifts ?>> GetAllAsync(int employeeID)
+        public async Task<List<Shifts?>> GetAllEmployeeShifts(int employeeID)
         {
+            var empShifts = await _context.Shifts.AnyAsync(s => s.EmployeeID == employeeID);
+            if (!empShifts) return null;
             var shifts = await _context.Shifts.Where(s => s.EmployeeID == employeeID).ToListAsync();
-            if (shifts == null) return null;
             return shifts;
         }
 
-        public async Task<Shifts?> UpdateShift(Shifts updatedShift)
+        public async Task<Shifts?> GetShiftByIdAsync(int shiftID)
         {
-            var shift = await _context.Shifts.FirstOrDefaultAsync(x => x.Id == updatedShift.Id);
+            var shift = await _context.Shifts.FirstOrDefaultAsync(x => x.Id == shiftID);
+            if (shift == null) return null;
+            return shift;
+        }
+
+        public async Task<Shifts?> UpdateShift(int id,Shifts updatedShift)
+        {
+            var shift = await _context.Shifts.FirstOrDefaultAsync(x => x.Id == id);
             if (shift == null) return null;
             shift.BeginShift = updatedShift.BeginShift;
             shift.EndShift = updatedShift.EndShift;
-            shift.EmployeeID = updatedShift.EmployeeID;
-            shift.Employee = updatedShift.Employee;
             await _context.SaveChangesAsync();
             return shift;
         }
