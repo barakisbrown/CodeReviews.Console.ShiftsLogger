@@ -6,4 +6,5 @@ public class ShiftDTO
     public DateTime BeginShift { get; set; } = DateTime.Now;
 
     public DateTime EndShift { get; set; } = DateTime.Now;
+
 }
