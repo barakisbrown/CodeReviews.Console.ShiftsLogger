@@ -13,6 +13,7 @@ namespace ShiftLogger.Barakisbrown.Repository
             await _context.Shifts.AddAsync(shifts);
             await _context.SaveChangesAsync();
             return shifts;
+
         }
 
         public async Task<Shifts?> DeleteShift(int shiftID, int employeeID)
@@ -31,6 +32,11 @@ namespace ShiftLogger.Barakisbrown.Repository
             if (!empShifts) return null;
             var shifts = await _context.Shifts.Where(s => s.EmployeeID == employeeID).ToListAsync();
             return shifts;
+        }
+
+        public async Task<List<Shifts>> GetAllShiftsAsync()
+        {
+            return await _context.Shifts.ToListAsync();
         }
 
         public async Task<Shifts?> GetShiftByIdAsync(int shiftID)

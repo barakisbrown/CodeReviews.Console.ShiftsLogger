@@ -38,7 +38,7 @@ namespace ShiftLogger.Barakisbrown.Controllers
         // PUT=>api/Employee
         // Creating an Employee
         [HttpPost]
-        public async Task<IActionResult> CreateEmployee([FromBody] EmployeeDTO emp)        
+        public async Task<IActionResult> CreateEmployee([FromBody] EmployeeCreateDTO emp)        
         {
             Employee e = emp.Adapt<Employee>();
             await _employeeRepo.AddEmployeeAsync(e);

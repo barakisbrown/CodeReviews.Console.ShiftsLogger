@@ -1,4 +1,5 @@
-﻿using Mapster;
+﻿using System.Security.Cryptography.X509Certificates;
+using Mapster;
 using Microsoft.AspNetCore.Mvc;
 using ShiftLogger.Barakisbrown.DTO;
 using ShiftLogger.Barakisbrown.Interfaces;
@@ -17,6 +18,25 @@ namespace ShiftLogger.Barakisbrown.Controllers
             _shiftRepo = repo;
         }
 
+        // CREATE A SHIFT. EMPID can be 0
+        [HttpPost()]
+        public async Task<IActionResult> CreateShift([FromBody] ShiftDTO shift)
+        {
+            var tempShift = shift.Adapt<Shifts>();
+            await _shiftRepo.CreateShift(tempShift);
+            return CreatedAtAction(nameof(GetAllEmployeeShifts), new {Id = tempShift.Id},tempShift);
+
+        }
+        
+        // GET ALL SHIFTS
+        // GET: api/shifts
+        [HttpGet]
+        public async Task<IActionResult> GetAllShitsAsyn()
+        {
+            var shifts = await _shiftRepo.GetAllShiftsAsync();
+            if (shifts == null) return NotFound();
+            return Ok(shifts);
+        }
         // Get an Employee Shifts
         // Get: api/shift/{id}
         [HttpGet("{id}")]
@@ -25,16 +45,6 @@ namespace ShiftLogger.Barakisbrown.Controllers
             var shifts = await _shiftRepo.GetAllEmployeeShifts(id);
             if (shifts == null) return NotFound();
             return Ok(shifts);
-        }
-
-        // Get a shift based on the shift ID
-        // Get: api/shift/shifts/{shiftID}
-        [HttpGet("shifts/{shiftID}")]
-        public async Task<IActionResult> GetAShift([FromRoute] int shiftID)
-        {
-            var shift = await _shiftRepo.GetShiftByIdAsync(shiftID);
-            if (shift == null) return NotFound();
-            return Ok(shift);
         }
 
         // DELETE A SHIFT
