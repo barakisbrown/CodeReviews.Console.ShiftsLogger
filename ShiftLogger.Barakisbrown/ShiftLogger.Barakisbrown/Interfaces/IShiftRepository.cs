@@ -11,5 +11,5 @@ public interface IShiftRepository
     Task<Shifts> CreateShift(Shifts shifts);
     Task<Shifts ?> UpdateShift(int shiftID,Shifts updatedShift);
     Task<Shifts?> DeleteShift(int shiftID, int employeeID);
-    Task<Employee> LinkEmpToShift(int shiftid, int empid);
+    Task<List<Shifts>> LinkEmpToShift(int shiftid, int empid);
 }

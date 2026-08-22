@@ -54,19 +54,24 @@ namespace ShiftLogger.Barakisbrown.Repository
             return shift;
         }
 
-        public async Task<Employee> LinkEmpToShift(int shiftid, int empid)
+        public async Task<List<Shifts>> LinkEmpToShift(int shiftid, int empid)
         {
             List<Shifts> shifts = await _context.Shifts.Where(x => x.Id == shiftid).ToListAsync();
-            var emp = await _context.Employees.FindAsync(empid);
-
-            if (emp == null || shifts == null) return null;
-            foreach(var shift in shifts)
+            var emp = await _context.Employees.AnyAsync(x => x.Id == empid);
+            if (emp)
             {
-                emp.shifts.Add(shift);
+                foreach (var shift in shifts)
+                {
+                    shift.EmployeeID = empid;
+                }
             }
-
+            else
+            {
+                return null;
+            }
+            
             await _context.SaveChangesAsync();
-            return emp;
+            return shifts;
 
         }
 
