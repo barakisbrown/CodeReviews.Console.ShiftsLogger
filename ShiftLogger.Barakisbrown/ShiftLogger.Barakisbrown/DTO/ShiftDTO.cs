@@ -7,4 +7,6 @@ public class ShiftDTO
 
     public DateTime EndShift { get; set; } = DateTime.Now;
 
+    public int EmployeeId { get; set; }
+
 }
