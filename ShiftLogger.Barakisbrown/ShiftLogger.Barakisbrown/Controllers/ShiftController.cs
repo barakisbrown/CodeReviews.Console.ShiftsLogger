@@ -20,7 +20,7 @@ namespace ShiftLogger.Barakisbrown.Controllers
 
         // CREATE A SHIFT. EMPID can be 0
         [HttpPost()]
-        public async Task<IActionResult> CreateShift([FromBody] ShiftDTO shift)
+        public async Task<IActionResult> CreateShift([FromBody] CreatedDTO shift)
         {
             var tempShift = shift.Adapt<Shifts>();
             await _shiftRepo.CreateShift(tempShift);
@@ -38,13 +38,21 @@ namespace ShiftLogger.Barakisbrown.Controllers
             return Ok(shifts);
         }
         // Get an Employee Shifts
-        // Get: api/shift/{id}
-        [HttpGet("{id}")]
+        // Get: api/shift/employee/{id}
+        [HttpGet("employee/{id}")]
         public async Task<IActionResult> GetAllEmployeeShifts([FromRoute] int id)
         {
             var shifts = await _shiftRepo.GetAllEmployeeShifts(id);
             if (shifts == null) return NotFound();
             return Ok(shifts);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetShiftBytIDAsync(int id)
+        {
+            var shift = await _shiftRepo.GetByIdAsync(id);
+            if (shift == null) return NotFound();
+            return Ok(shift);
         }
 
         // DELETE A SHIFT
@@ -64,6 +72,16 @@ namespace ShiftLogger.Barakisbrown.Controllers
         {
             var tempShift = updateDTO.Adapt<Shifts>();
             tempShift = await _shiftRepo.UpdateShift(id,tempShift);
+            if (tempShift == null) return NotFound();
+            return Ok(tempShift);
+        }
+
+        // Link the Employees to the shifts that as assigned to this employee
+        [HttpPut]
+        [Route("/shift/{shiftid}/employee/{empid}")]
+        public async Task<IActionResult> LinkEmpoyeeToShift([FromRoute] int shiftid, [FromRoute] int empid)
+        {
+            var tempShift = await _shiftRepo.LinkEmpToShift(shiftid,empid);
             if (tempShift == null) return NotFound();
             return Ok(tempShift);
         }
