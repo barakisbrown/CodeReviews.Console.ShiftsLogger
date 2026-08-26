@@ -1,9 +1,5 @@
-﻿using ShiftLogger.Barakisbrown.UI.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ShiftLogger.Barakisbrown.UI.DTO;
+using ShiftLogger.Barakisbrown.UI.Models;
 
 namespace ShiftLogger.Barakisbrown.UI.Interfaces;
 
@@ -11,5 +7,7 @@ public interface IEmployeeRepo
 {
     public Task<List<Employee?>> GetEmployeesAsync();
 
-    public Task<Employee> GetEmployeeById(int id);
+    public Task<Employee ?> GetEmployeeById(int id);
+
+    public Task<Employee?> CreateEmployee(CreateEmpDTO empDTO);
 }
