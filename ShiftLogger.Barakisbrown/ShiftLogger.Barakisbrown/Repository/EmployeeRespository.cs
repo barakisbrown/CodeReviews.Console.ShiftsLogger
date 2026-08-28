@@ -31,14 +31,19 @@ public class EmployeeRespository : IEmployeeRepository
 
     }
 
+    public async Task<bool> Exist(int id)
+    {
+        return await _context.Employees.AnyAsync(x => x.Id == id);
+    }
+
     public async Task<List<Employee>> GetAllAsync()
     {
-        return await _context.Employees.ToListAsync();
+        return await _context.Employees.Include(e => e.shifts).ToListAsync();
     }
 
     public async Task<Employee?> GetByIDAsync(int id)
     {
-        return await _context.Employees.FindAsync(id);
+        return await _context.Employees.Include(e => e.shifts).FirstOrDefaultAsync(x => x.Id == id);
     }
 
     public async Task<Employee?> Update(int id, Employee updatedEmployee)
