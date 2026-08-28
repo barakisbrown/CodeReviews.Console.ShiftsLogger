@@ -11,19 +11,24 @@ namespace ShiftLogger.Barakisbrown.Controllers
     [Route("api/shift")]
     public class ShiftController : ControllerBase
     {
+        private readonly IEmployeeRepository _empRepo;
         private readonly IShiftRepository _shiftRepo;
 
-        public ShiftController(IShiftRepository repo)
+        public ShiftController(IShiftRepository repo,IEmployeeRepository empRepo)
         {
             _shiftRepo = repo;
+            _empRepo = empRepo;
         }
 
         // CREATE A SHIFT. EMPID can be 0
         [HttpPost()]
-        public async Task<IActionResult> CreateShift([FromBody] CreatedDTO shift)
+        [Route("{empID}")]
+        public async Task<IActionResult> CreateShift([FromRoute] int empID,[FromBody] CreatedDTO shift)
         {
+            if (!await _empRepo.Exist(empID)) return BadRequest("Employee does not exist");
+
             var tempShift = shift.Adapt<Shifts>();
-            await _shiftRepo.CreateShift(tempShift);
+            await _shiftRepo.CreateShift(empID,tempShift);
             return CreatedAtAction(nameof(GetAllEmployeeShifts), new {Id = tempShift.Id},tempShift);
 
         }
@@ -31,7 +36,7 @@ namespace ShiftLogger.Barakisbrown.Controllers
         // GET ALL SHIFTS
         // GET: api/shifts
         [HttpGet]
-        public async Task<IActionResult> GetAllShitsAsyn()
+        public async Task<IActionResult> GetAllShits()
         {
             var shifts = await _shiftRepo.GetAllShiftsAsync();
             if (shifts == null) return NotFound();
@@ -48,7 +53,7 @@ namespace ShiftLogger.Barakisbrown.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetShiftBytIDAsync(int id)
+        public async Task<IActionResult> GetShiftBytID(int id)
         {
             var shift = await _shiftRepo.GetByIdAsync(id);
             if (shift == null) return NotFound();
@@ -74,16 +79,6 @@ namespace ShiftLogger.Barakisbrown.Controllers
             tempShift = await _shiftRepo.UpdateShift(id,tempShift);
             if (tempShift == null) return NotFound();
             return Ok(tempShift);
-        }
-
-        // Link the Employees to the shifts that as assigned to this employee
-        [HttpPut]
-        [Route("/shift/{shiftid}/employee/{empid}")]
-        public async Task<IActionResult> LinkEmpoyeeToShift([FromRoute] int shiftid, [FromRoute] int empid)
-        {
-            var tempShift = await _shiftRepo.LinkEmpToShift(shiftid,empid);
-            if (tempShift == null) return NotFound();
-            return Ok(tempShift);
-        }
+        }       
     }
 }

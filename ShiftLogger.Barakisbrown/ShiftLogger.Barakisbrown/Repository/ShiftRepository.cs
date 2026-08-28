@@ -9,10 +9,10 @@ namespace ShiftLogger.Barakisbrown.Repository
     public class ShiftRepository(ShiftContext context) : IShiftRepository
     {
         private readonly ShiftContext _context = context;
-        public async Task<Shifts> CreateShift(Shifts shifts)
+        public async Task<Shifts> CreateShift(int empID,Shifts shifts)
         {
             // FK CAN NOT BE 0 WHEN ADDING
-            shifts.EmployeeID = 1;
+            shifts.EmployeeID = empID;
             await _context.Shifts.AddAsync(shifts);
             await _context.SaveChangesAsync();
             return shifts;
@@ -53,28 +53,7 @@ namespace ShiftLogger.Barakisbrown.Repository
             if (shift == null) return null;
             return shift;
         }
-
-        public async Task<List<Shifts>> LinkEmpToShift(int shiftid, int empid)
-        {
-            List<Shifts> shifts = await _context.Shifts.Where(x => x.Id == shiftid).ToListAsync();
-            var emp = await _context.Employees.AnyAsync(x => x.Id == empid);
-            if (emp)
-            {
-                foreach (var shift in shifts)
-                {
-                    shift.EmployeeID = empid;
-                }
-            }
-            else
-            {
-                return null;
-            }
-            
-            await _context.SaveChangesAsync();
-            return shifts;
-
-        }
-
+        
         public async Task<Shifts?> UpdateShift(int id,Shifts updatedShift)
         {
             var shift = await _context.Shifts.FirstOrDefaultAsync(x => x.Id == id);
