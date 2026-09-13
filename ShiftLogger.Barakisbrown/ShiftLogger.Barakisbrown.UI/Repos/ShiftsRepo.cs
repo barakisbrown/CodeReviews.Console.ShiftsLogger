@@ -1,4 +1,5 @@
-﻿using ShiftLogger.Barakisbrown.UI.Interfaces;
+﻿using Microsoft.Extensions.Logging;
+using ShiftLogger.Barakisbrown.UI.Interfaces;
 using ShiftLogger.Barakisbrown.UI.Models;
 using ShiftLogger.Barakisbrown.UI.UserInput;
 using Spectre.Console;
@@ -8,14 +9,17 @@ namespace ShiftLogger.Barakisbrown.UI.Repos;
 
 public class ShiftsRepo : IShiftRepo
 {
+    private ILogger<ShiftsRepo> _log; 
     private int portNumber = 5012;
     private string baseUrl;
 
     private HttpClient client;
 
-    public ShiftsRepo()
+    public ShiftsRepo(IHttpClientFactory httpClientFactory,ILogger<ShiftsRepo> logger)
     {
         baseUrl = $"http://localhost:{portNumber}/api/shift/";
+        client = httpClientFactory.CreateClient();
+        _log = logger;
     }
 
     public async Task<List<Shifts ?>> GetAllShiftsAsync()
