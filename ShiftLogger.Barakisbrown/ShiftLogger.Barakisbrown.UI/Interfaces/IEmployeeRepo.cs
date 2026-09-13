@@ -5,9 +5,11 @@ namespace ShiftLogger.Barakisbrown.UI.Interfaces;
 
 public interface IEmployeeRepo
 {
-    public Task<List<Employee?>> GetEmployeesAsync();
+    public Task<List<EmployeeDTO ?>> GetAllEmployees();
 
-    public Task<Employee ?> GetEmployeeById(int id);
+    public Task<EmployeeDTO ?> GetEmployeeById(int id);
 
     public Task<Employee?> CreateEmployee(CreateEmpDTO empDTO);
+
+    public Task<int> GetEmployeeID(CreateEmpDTO empDTO);
 }
