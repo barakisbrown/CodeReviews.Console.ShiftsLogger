@@ -23,6 +23,23 @@ public static class Helper
     public static void DisplayFullName(Employee emp)
     {
         var fullName = emp.FirstName + " " + emp.LastName;
-        AnsiConsole.WriteLine(fullName);
+        Console.Out.WriteLineAsync(fullName);
+    }
+
+    public static void ShowError(string msg)
+    {
+        AnsiConsole.MarkupLineInterpolated($"[bold red]{msg}[/]"); 
+    }
+
+    public static TextPrompt<int> ShowMenuChoices(string name,int[] choices)
+    {
+        return new TextPrompt<int>(name)
+                .AddChoices(choices);
+    }
+
+    public async static Task<bool> Confirmation(string msg)
+    {
+        var confirm = await AnsiConsole.ConfirmAsync(msg);
+        return confirm;
     }
 }
