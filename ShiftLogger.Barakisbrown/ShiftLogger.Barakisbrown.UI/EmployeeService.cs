@@ -1,16 +1,13 @@
-﻿using Microsoft.Extensions.Logging;
+﻿namespace ShiftLogger.Barakisbrown.UI;
+
+using Microsoft.Extensions.Logging;
 using ShiftLogger.Barakisbrown.UI.DTO;
 using ShiftLogger.Barakisbrown.UI.Interfaces;
 using ShiftLogger.Barakisbrown.UI.Models;
 using ShiftLogger.Barakisbrown.UI.UserInput;
 using Spectre.Console;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace ShiftLogger.Barakisbrown.UI;
+
 
 public class EmployeeService : IService
 {
