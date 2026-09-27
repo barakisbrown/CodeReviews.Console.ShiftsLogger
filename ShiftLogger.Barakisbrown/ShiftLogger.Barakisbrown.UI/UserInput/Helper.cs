@@ -53,7 +53,7 @@ public static class Helper
     /// <param name="msg"> Message displayed to the screen.</param>
     public static void ShowError(string msg)
     {
-        AnsiConsole.MarkupLineInterpolated($"[bold red]{msg}[/]"); 
+        AnsiConsole.MarkupLineInterpolated($"[bold red]{msg}[/]");
     }
 
     /// <summary>
