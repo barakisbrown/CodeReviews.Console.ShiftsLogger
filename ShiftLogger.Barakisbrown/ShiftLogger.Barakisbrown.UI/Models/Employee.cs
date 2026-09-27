@@ -1,20 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿// <copyright file="Employee.cs" company="barakisbrown">
+// Copyright (c) barakisbrown. All rights reserved.
+// </copyright>
 
-namespace ShiftLogger.Barakisbrown.UI.Models
+namespace ShiftLogger.Barakisbrown.UI.Models;
+
+/// <summary>
+/// Employee POCO Class.
+/// </summary>
+public class Employee
 {
-    public  class Employee
-    {
-        public int Id { get; set; }
+    /// <summary>
+    /// Gets or sets Id field of the DB.
+    /// </summary>
+    public int Id { get; set; }
 
-        public required string FirstName { get; set; }
+    /// <summary>
+    /// Gets or Sets FirstName.
+    /// </summary>
+    required public string FirstName { get; set; }
 
-        public required string LastName { get; set; }
+    /// <summary>
+    /// Gets or Sets LastName.
+    /// </summary>
+    required public string LastName { get; set; }
 
-        // Required reference navigation to principle
-        public ICollection<Shifts> shifts { get; set; } = new List<Shifts>();
-    }
+    // Required reference navigation to principle
+
+    /// <summary>
+    /// Gets or Sets Shifts.
+    /// </summary>
+    public ICollection<Shifts> Shifts { get; set; } = new List<Shifts>();
 }

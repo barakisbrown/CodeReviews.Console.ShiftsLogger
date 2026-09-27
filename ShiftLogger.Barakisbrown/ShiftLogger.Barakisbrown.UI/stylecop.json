@@ -9,6 +9,7 @@
   "settings": {
     "documentationRules": {
       "companyName": "barakisbrown"
-    }
+    },
+    "orderingRules": { "usingDirectivesPlacement": "outsideNamespace"}
   }
 }

@@ -1,4 +1,8 @@
-﻿namespace ShiftLogger.Barakisbrown.UI;
+﻿// <copyright file="EmployeeService.cs" company="barakisbrown">
+// Copyright (c) barakisbrown. All rights reserved.
+// </copyright>
+
+namespace ShiftLogger.Barakisbrown.UI;
 
 using Microsoft.Extensions.Logging;
 using ShiftLogger.Barakisbrown.UI.DTO;
@@ -7,29 +11,61 @@ using ShiftLogger.Barakisbrown.UI.Models;
 using ShiftLogger.Barakisbrown.UI.UserInput;
 using Spectre.Console;
 
-
-
+/// <summary>
+/// Service for using with employees such as creating.
+/// Editing or deleting Employees.
+/// </summary>
 public class EmployeeService : IService
 {
-    private IEmployeeRepo _empRepo;
-    private IShiftRepo _shiftRep;
-    private ILogger<App> _logger;
+    private readonly IEmployeeRepo empRepo;
+    private readonly IShiftRepo shiftRep;
+    private readonly ILogger<App> logger;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="EmployeeService"/> class.
+    /// </summary>
+    /// <param name="empRepo">employee repo interface.</param>
+    /// <param name="shiftRepo">shift repo interface.</param>
+    /// <param name="logger">ILogger interface.</param>
     public EmployeeService(
     IEmployeeRepo empRepo, IShiftRepo shiftRepo, ILogger<App> logger)
     {
-        _empRepo = empRepo;
-        _shiftRep = shiftRepo;
-        _logger = logger;
+        this.empRepo = empRepo;
+        this.shiftRep = shiftRepo;
+        this.logger = logger;
     }
 
+    /// <summary>
+    /// Displays a title to the screen with or without app version.
+    /// </summary>
+    /// <param name="sectionName">The title being displayed.</param>
+    /// <param name="appVersion">if null then shows nothing otherwise show the appversion.</param>
+    public static void Title(string sectionName, string? appVersion)
+    {
+        AnsiConsole.Write(
+              new FigletText(sectionName)
+              .Centered()
+              .Color(Color.Blue));
+        if (appVersion is not null)
+        {
+            AnsiConsole.Write(
+            new FigletText(appVersion)
+            .Centered()
+            .Color(Color.Blue));
+        }
+    }
+
+    /// <summary>
+    /// This launches the application.
+    /// </summary>
+    /// <returns> async.</returns>
     public async Task Run()
     {
         bool exit = false;
         while (!exit)
         {
             AnsiConsole.Clear();
-            Title("Employee Section","1.0.0");
+            Title("Employee Section", "1.0.0");
             AnsiConsole.WriteLine();
             Helper.ShowMsg("Employee Section");
             Helper.ShowMsg("-----------------------");
@@ -40,19 +76,20 @@ public class EmployeeService : IService
             Helper.ShowMsg("5.List All Employees   ");
             Helper.ShowMsg("6.Exit Section         ");
             Helper.ShowMsg("-----------------------");
-            var choices = await AnsiConsole.PromptAsync(Helper.ShowMenuChoices("Select Option", [1, 2, 3, 4, 5,6]));
-            switch(choices)
+            #pragma warning disable SA1001 // CommasMustBeSpacedCorrectly
+            var choices = await AnsiConsole.PromptAsync(Helper.ShowMenuChoices("Select Option",[1, 2, 3, 4, 5, 6]));
+            switch (choices)
             {
-                case >= 2  and <= 4:
+                case >= 2 and <= 4:
                     Helper.ShowMsg($"[yellow]Not implemented yet[/]");
                     Thread.Sleep(3000);
                     break;
                 case 1:
-                    await CreateUser();
+                    await this.CreateUser();
                     Thread.Sleep(2000);
                     break;
                 case 5:
-                    await DisplayAllEmployees();
+                    await this.DisplayAllEmployees();
                     Thread.Sleep(2000);
                     break;
                 case 6:
@@ -65,7 +102,9 @@ public class EmployeeService : IService
     private static void ListEmployees(List<EmployeeDTO?> employees)
     {
         if (employees.Count == 0)
+        {
             Helper.ShowMsg("There are currently 0 Employees");
+        }
         else
         {
             AnsiConsole.Clear();
@@ -74,7 +113,7 @@ public class EmployeeService : IService
             table.AddColumn("First Name");
             table.AddColumn("Last Name");
 
-            foreach (var emp in employees)
+            foreach (EmployeeDTO? emp in employees)
             {
                 table.AddRow(emp.FirstName, emp.LastName);
             }
@@ -91,8 +130,9 @@ public class EmployeeService : IService
         while (true)
         {
             AnsiConsole.Clear();
-            Title("Create Employee Section",null);
+            Title("Create Employee Section", null);
             AnsiConsole.WriteLine();
+
             // FETCH First and Last Name
             var firstName = await AnsiConsole.PromptAsync(
                 new TextPrompt<string>("First Name -> "));
@@ -100,7 +140,7 @@ public class EmployeeService : IService
                 new TextPrompt<string>("Last Name -> "));
 
             // DO THEY EXIST?
-            var id = await _empRepo.GetEmployeeID(new CreateEmpDTO { FirstName = firstName, LastName = lastName });
+            var id = await this.empRepo.GetEmployeeID(new CreateEmpDTO { FirstName = firstName, LastName = lastName });
             if (id != -1)
             {
                 Helper.ShowError("Employee Exist. No need to Create Another one.");
@@ -111,15 +151,22 @@ public class EmployeeService : IService
                     Thread.Sleep(3000);
                     return;
                 }
+
                 continue;
             }
+
             // ID == -1 THEN CREATE EMPLOYEE
-            Employee? emp = await _empRepo.CreateEmployee(new CreateEmpDTO { FirstName = firstName, LastName = lastName });
+            Employee? emp = await this.empRepo.CreateEmployee(new CreateEmpDTO { FirstName = firstName, LastName = lastName });
             if (emp.Id != 0)
             {
-                AnsiConsole.Write("Welcome :"); Helper.DisplayFullName(emp);
+                AnsiConsole.Write("Welcome :");
+                Helper.DisplayFullName(emp);
                 var confirm = await Helper.Confirmation("Create Another Employee?");
-                if (confirm) continue;
+                if (confirm)
+                {
+                    continue;
+                }
+
                 Helper.ShowMsg("Returning back to the menu.");
                 return;
             }
@@ -128,23 +175,6 @@ public class EmployeeService : IService
 
     private async Task DisplayAllEmployees()
     {
-        ListEmployees(await _empRepo.GetAllEmployees());
-    }
-
-    public static void Title(string sectionName, string? appVersion)
-    {
-        AnsiConsole.Write(
-
-              new FigletText(sectionName)
-              .Centered()
-              .Color(Color.Blue));
-        if (appVersion is not null)
-        {
-            AnsiConsole.Write(
-            new FigletText(appVersion)
-            .Centered()
-            .Color(Color.Blue)
-            );
-        }
+        ListEmployees(await this.empRepo.GetAllEmployees());
     }
 }

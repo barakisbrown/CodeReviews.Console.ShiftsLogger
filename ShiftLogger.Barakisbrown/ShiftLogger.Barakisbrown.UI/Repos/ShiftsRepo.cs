@@ -1,35 +1,49 @@
-﻿using Microsoft.Extensions.Logging;
+﻿// <copyright file="ShiftsRepo.cs" company="barakisbrown">
+// Copyright (c) barakisbrown. All rights reserved.
+// </copyright>
+namespace ShiftLogger.Barakisbrown.UI.Repos;
+
+using Microsoft.Extensions.Logging;
 using ShiftLogger.Barakisbrown.UI.Interfaces;
 using ShiftLogger.Barakisbrown.UI.Models;
 using ShiftLogger.Barakisbrown.UI.UserInput;
-using Spectre.Console;
 using System.Net.Http.Json;
 
-namespace ShiftLogger.Barakisbrown.UI.Repos;
-
+/// <summary>
+/// Reposository of functions related to shifts.
+/// </summary>
 public class ShiftsRepo : IShiftRepo
 {
-    private ILogger<ShiftsRepo> _log; 
-    private int portNumber = 5012;
+    private readonly ILogger<ShiftsRepo> log;
+    private readonly int portNumber = 5012;
     private string baseUrl;
 
     private HttpClient client;
 
-    public ShiftsRepo(IHttpClientFactory httpClientFactory,ILogger<ShiftsRepo> logger)
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ShiftsRepo"/> class.
+    /// </summary>
+    /// <param name="httpClientFactory">httpClientFacotry Interface.</param>
+    /// <param name="logger">Ilogger interface.</param>
+    public ShiftsRepo(IHttpClientFactory httpClientFactory, ILogger<ShiftsRepo> logger)
     {
-        baseUrl = $"http://localhost:{portNumber}/api/shift/";
-        client = httpClientFactory.CreateClient();
-        _log = logger;
+        this.baseUrl = $"http://localhost:{this.portNumber}/api/shift/";
+        this.client = httpClientFactory.CreateClient();
+        this.log = logger;
     }
 
-    public async Task<List<Shifts ?>> GetAllShiftsAsync()
+    /// <summary>
+    /// Returns Null or List of all shifts.
+    /// </summary>
+    /// <returns>Null OR List of Shifts. </Shifts></returns>
+    public async Task<List<Shifts?>> GetAllShiftsAsync()
     {
-        client = new()
+        this.client = new ()
         {
-            BaseAddress = new Uri(baseUrl),
+            BaseAddress = new Uri(this.baseUrl),
         };
 
-        HttpResponseMessage message = await client.GetAsync(baseUrl);
+        HttpResponseMessage message = await this.client.GetAsync(this.baseUrl);
 
         if (message.StatusCode == System.Net.HttpStatusCode.NotFound)
         {
@@ -37,9 +51,12 @@ public class ShiftsRepo : IShiftRepo
             return null;
         }
 
-       
-        List<Shifts?>? shifts = await client.GetFromJsonAsync<List<Shifts ?>>("");
-        if (shifts == null) return null;
+        List<Shifts?>? shifts = await this.client.GetFromJsonAsync<List<Shifts?>>(string.Empty);
+        if (shifts == null)
+        {
+            return null;
+        }
+
         return shifts;
     }
 }
