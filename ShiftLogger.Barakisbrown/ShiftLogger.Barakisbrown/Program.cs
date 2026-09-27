@@ -1,3 +1,7 @@
+// <copyright file="Program.cs" company="barakisbrown">
+// Copyright (c) barakisbrown. All rights reserved.
+// </copyright>
+
 using Microsoft.EntityFrameworkCore;
 using ShiftLogger.Barakisbrown.DataLayer;
 using ShiftLogger.Barakisbrown.Interfaces;
@@ -10,6 +14,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers().AddNewtonsoftJson(options => { options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore; });
+
 // ADD DB CONTEXT BELOW
 builder.Services.AddDbContext<ShiftContext>(opt => opt.UseSqlServer(builder.Configuration.GetConnectionString("Container")));
 builder.Services.AddScoped<IShiftRepository, ShiftRepository>();

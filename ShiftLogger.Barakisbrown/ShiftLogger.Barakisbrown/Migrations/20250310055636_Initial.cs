@@ -1,4 +1,7 @@
-﻿using System;
+﻿// <copyright file="20250310055636_Initial.cs" company="barakisbrown">
+// Copyright (c) barakisbrown. All rights reserved.
+// </copyright>
+using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable

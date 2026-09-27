@@ -38,12 +38,12 @@ public class EmployeeRespository : IEmployeeRepository
 
     public async Task<List<Employee>> GetAllAsync()
     {
-        return await _context.Employees.Include(e => e.shifts).ToListAsync();
+        return await _context.Employees.Include(e => e.Shifts).ToListAsync();
     }
 
     public async Task<Employee?> GetByIDAsync(int id)
     {
-        return await _context.Employees.Include(e => e.shifts).FirstOrDefaultAsync(x => x.Id == id);
+        return await _context.Employees.Include(e => e.Shifts).FirstOrDefaultAsync(x => x.Id == id);
     }
 
     public async Task<Employee?> Update(int id, Employee updatedEmployee)
@@ -54,7 +54,7 @@ public class EmployeeRespository : IEmployeeRepository
 
         emp.FirstName = updatedEmployee.FirstName;
         emp.LastName = updatedEmployee.LastName;
-        emp.shifts = updatedEmployee.shifts;
+        emp.Shifts = updatedEmployee.Shifts;
 
         await _context.SaveChangesAsync();
         return emp;
