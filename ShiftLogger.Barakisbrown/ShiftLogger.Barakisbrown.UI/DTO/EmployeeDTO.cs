@@ -23,4 +23,9 @@ public class EmployeeDTO
     /// Gets or Sets LastName.
     /// </summary>
     required public string LastName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Gets the FullName.
+    /// </summary>
+    public string FullName => this.FirstName + " " + this.LastName;
 }
