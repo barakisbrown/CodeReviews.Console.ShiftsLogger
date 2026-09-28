@@ -145,4 +145,39 @@ public class EmployeeRepo : IEmployeeRepo
 
         return (exist == null) ? -1 : exist.Id;
     }
+
+    /// <summary>
+    /// Deeletes an employee from the back end.
+    /// </summary>
+    /// <param name="employee">DTO of employee deleted.</param>
+    /// <returns>Null or Employee Deleted.</returns>
+    public async Task<Employee> DeleteEmployee(EmployeeDTO employee)
+    {
+        try
+        {
+
+            string url = $"https://localhost:5012:/api/employees/{employee.Id}";
+
+            this.client = this.factory.CreateClient();
+            HttpResponseMessage response = await this.client.DeleteAsync(url);
+            if (response.IsSuccessStatusCode)
+            {
+                Helper.ShowMsg($"{employee.FirstName} was deleted successfully.");
+            }
+        }
+        catch (HttpRequestException exct)
+        {
+            Helper.ShowError("Error trying to delete user found.");
+            Helper.ShowError(exct.Message);
+            return null;
+        }
+        catch (NullReferenceException nrf)
+        {
+            Helper.ShowError("Employee does not exist.");
+            Helper.ShowError(nrf.Message);
+            return null;
+        }
+
+        return employee.Adapt<Employee>();
+    }
 }

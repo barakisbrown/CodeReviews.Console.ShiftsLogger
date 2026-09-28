@@ -38,4 +38,11 @@ public interface IEmployeeRepo
     /// <param name="empDTO"> CreateEmpDTO to find the id.</param>
     /// <returns>int reprensenting id.</returns>
     public Task<int> GetEmployeeID(CreateEmpDTO empDTO);
+
+    /// <summary>
+    /// Deletes an Employee from the system.
+    /// </summary>
+    /// <param name="employee">Employee being deleted.</param>
+    /// <returns>Employee that was deleted.</returns>
+    public Task<Employee> DeleteEmployee(EmployeeDTO employee);
 }
