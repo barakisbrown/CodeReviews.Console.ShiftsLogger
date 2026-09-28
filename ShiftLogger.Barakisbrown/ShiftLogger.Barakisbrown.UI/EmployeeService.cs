@@ -76,17 +76,21 @@ public class EmployeeService : IService
             Helper.ShowMsg("5.List All Employees   ");
             Helper.ShowMsg("6.Exit Section         ");
             Helper.ShowMsg("-----------------------");
-            #pragma warning disable SA1001 // CommasMustBeSpacedCorrectly
-            var choices = await AnsiConsole.PromptAsync(Helper.ShowMenuChoices("Select Option",[1, 2, 3, 4, 5, 6]));
+#pragma warning disable SA1001 // CommasMustBeSpacedCorrectly
+            var choices = await AnsiConsole.PromptAsync(Helper.ShowMenuChoices("Select Option", [1, 2, 3, 4, 5, 6]));
             switch (choices)
             {
-                case >= 2 and <= 4:
-                    Helper.ShowMsg($"[yellow]Not implemented yet[/]");
-                    Thread.Sleep(3000);
-                    break;
                 case 1:
                     await this.CreateUser();
                     Thread.Sleep(2000);
+                    break;
+                case 2:
+                case 3:
+                    Helper.ShowMsg($"[yellow]Not implemented yet[/]");
+                    Thread.Sleep(3000);
+                    break;
+                case 4:
+                    await this.DeleteEmployees();
                     break;
                 case 5:
                     await this.DisplayAllEmployees();
@@ -177,4 +181,59 @@ public class EmployeeService : IService
     {
         ListEmployees(await this.empRepo.GetAllEmployees());
     }
+
+    private async Task SearchEmployees()
+    {
+
+    }
+
+    private async Task UpdateEmployees()
+    {
+
+    }
+
+    private async Task DeleteEmployees()
+    {
+        List<EmployeeDTO?> employees = await this.empRepo.GetAllEmployees();
+
+        bool complete = false;
+        while (!complete)
+        {
+            AnsiConsole.Clear();
+            Helper.ShowMsg("Delete Employee Section.");
+            Helper.ShowMsg("Please be careful here because you can not undo any changes made. All changes are permenant.");
+            Helper.ShowMsg("Note: Default User can not be deleted.");
+            Helper.ShowMsg(string.Empty);
+            var deletedEmp = await Helper.GetUserInfo(employees);
+            var deletedMsg = $"[red]Do you wish to delete this user {deletedEmp.FirstName + " " + deletedEmp.LastName}[/]";
+            if (deletedEmp.Id == -1)
+            {
+                break;
+            }
+
+            var confirm = await Helper.Confirmation(deletedMsg);
+            if (confirm)
+            {
+                var del = this.empRepo.DeleteEmployee(deletedEmp);
+                if (del != null)
+                {
+                    Helper.ShowError($"Deleting Employee {deletedEmp.FullName}");
+                    var leave = await Helper.Confirmation("Do you wish to delete another employee?");
+                    if (leave)
+                    {
+                        Helper.ShowMsg("Exiting the delete employee selection");
+                        Thread.Sleep(2000);
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                Helper.ShowMsg("Employee was not deleted.");
+            }
+
+            Thread.Sleep(2000);
+        }
+    }
+
 }
