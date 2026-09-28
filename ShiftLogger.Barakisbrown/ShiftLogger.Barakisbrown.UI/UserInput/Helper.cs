@@ -3,6 +3,7 @@
 // </copyright>
 namespace ShiftLogger.Barakisbrown.UI.UserInput;
 
+using ShiftLogger.Barakisbrown.UI.DTO;
 using ShiftLogger.Barakisbrown.UI.Models;
 using Spectre.Console;
 
@@ -77,5 +78,24 @@ public static class Helper
     {
         var confirm = await AnsiConsole.ConfirmAsync(msg);
         return confirm;
+    }
+
+    /// <summary>
+    /// Let the user select an employee from the avaiable list.
+    /// </summary>
+    /// <param name="users"> List of avaiable users to choose from.</param>
+    /// <returns>EmployeeDTO that the user selects.</returns>
+    public static async Task<EmployeeDTO> GetUserInfo(List<EmployeeDTO?> users)
+    {
+        int id = users.Find(x => x.FullName.Equals("DEFAULT USER")).Id;
+        List<EmployeeDTO?> displayUsers = users.Where(s => s.Id != id).ToList();
+        displayUsers.Add(new EmployeeDTO { Id = -1, FirstName = "EXIT", LastName = "SELECTION" });
+        var choices = new SelectionPrompt<EmployeeDTO>()
+            .Title("SELECT USER FROM LIST")
+            .UseConverter(s => $"[bold]{s.FullName}[/]")
+            .AddChoices<EmployeeDTO>(displayUsers);
+
+        var prompt = await AnsiConsole.PromptAsync(choices);
+        return prompt;
     }
 }
