@@ -81,21 +81,37 @@ public static class Helper
     }
 
     /// <summary>
-    /// Let the user select an employee from the avaiable list.
+    /// Let the user select an employee from the available list.
     /// </summary>
-    /// <param name="users"> List of avaiable users to choose from.</param>
-    /// <returns>EmployeeDTO that the user selects.</returns>
-    public static async Task<EmployeeDTO> GetUserInfo(List<EmployeeDTO?> users)
+    /// <param name="users"> List of available users to choose from.</param>
+    /// <returns>EmployeeDTO that the user selects or null if no users are present in the system.</returns>
+    public static async Task<EmployeeDTO?> GetUserInfo(List<EmployeeDTO?> users)
     {
-        int id = users.Find(x => x.FullName.Equals("DEFAULT USER")).Id;
-        List<EmployeeDTO?> displayUsers = users.Where(s => s.Id != id).ToList();
-        displayUsers.Add(new EmployeeDTO { Id = -1, FirstName = "EXIT", LastName = "SELECTION" });
-        var choices = new SelectionPrompt<EmployeeDTO>()
-            .Title("SELECT USER FROM LIST")
-            .UseConverter(s => $"[bold]{s.FullName}[/]")
-            .AddChoices<EmployeeDTO>(displayUsers);
+        try
+        {
+            const string title = "SELECT EMPLOYEE FROM LIST";
+            var displayUsers = users.ToList();
+            if (displayUsers.Count == users.Count)
+            {
+                displayUsers.Add(new EmployeeDTO { Id = -1, FirstName = "EXIT", LastName = "SELECTION" });
+            }
 
-        var prompt = await AnsiConsole.PromptAsync(choices);
-        return prompt;
+            if (!displayUsers.Exists(x => x.Id == -1))
+            {
+                displayUsers.Add(new EmployeeDTO { Id = -1, FirstName = "EXIT", LastName = "SELECTION" });
+            }
+
+            var choices = new SelectionPrompt<EmployeeDTO>()
+                .Title(title)
+                .UseConverter(s => $"[bold]{s.FullName}[/]")
+                .AddChoices<EmployeeDTO>(displayUsers);
+            var prompt = await AnsiConsole.PromptAsync(choices);
+            return prompt;
+        }
+        catch (NullReferenceException ext)
+        {
+            Helper.ShowError("An error occured accessing the system.");
+            return null;
+        }
     }
 }

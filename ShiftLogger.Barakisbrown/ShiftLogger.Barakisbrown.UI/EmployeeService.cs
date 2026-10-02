@@ -91,6 +91,7 @@ public class EmployeeService : IService
                     break;
                 case 4:
                     await this.DeleteEmployees();
+                    Thread.Sleep(2000);
                     break;
                 case 5:
                     await this.DisplayAllEmployees();
@@ -195,18 +196,29 @@ public class EmployeeService : IService
     private async Task DeleteEmployees()
     {
         List<EmployeeDTO?> employees = await this.empRepo.GetAllEmployees();
+        if (employees.Count == 0)
+        {
+            Helper.ShowMsg("There are no currently selected Employees");
+            return;
+        }
 
-        bool complete = false;
+        var complete = false;
         while (!complete)
         {
             AnsiConsole.Clear();
             Helper.ShowMsg("Delete Employee Section.");
-            Helper.ShowMsg("Please be careful here because you can not undo any changes made. All changes are permenant.");
-            Helper.ShowMsg("Note: Default User can not be deleted.");
+            Helper.ShowMsg("Please be careful here because you can not undo any changes made. All changes are permanent.");
             Helper.ShowMsg(string.Empty);
             var deletedEmp = await Helper.GetUserInfo(employees);
-            var deletedMsg = $"[red]Do you wish to delete this user {deletedEmp.FirstName + " " + deletedEmp.LastName}[/]";
-            if (deletedEmp.Id == -1)
+            if (deletedEmp == null)
+            {
+                complete = true;
+                Helper.ShowMsg("There are no users to delete!");
+                break;
+            }
+
+            var deletedMsg = $"[red]Do you wish to delete this user {deletedEmp?.FullName}[/]";
+            if (deletedEmp?.Id == -1)
             {
                 break;
             }
